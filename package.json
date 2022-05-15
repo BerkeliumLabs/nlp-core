@@ -1,0 +1,39 @@
+{
+  "name": "@berkelium/nlp-core",
+  "version": "0.0.1",
+  "description": "BerkeliumLabs is an open-source natural language processing tool for intent classification and response retrieval for building chatbots.",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node src/test.js",
+    "start": "nodemon src/index.js",
+    "build": ""
+  },
+  "author": "BerkeliumLabs",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BerkeliumLabs/nlp-core"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "NLP",
+    "chatbots",
+    "natuaral language processing",
+    "tensorflow",
+    "tensorflowjs"
+  ],
+  "bugs": {
+    "url": "https://github.com/BerkeliumLabs/nlp-core/issues"
+  },
+  "homepage": "https://berkeliumlabs.com",
+  "dependencies": {
+    "@tensorflow-models/universal-sentence-encoder": "^1.3.3",
+    "@tensorflow/tfjs": "^3.16.0",
+    "@tensorflow/tfjs-node": "^3.16.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}

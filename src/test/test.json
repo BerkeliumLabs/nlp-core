@@ -1,0 +1,18 @@
+[
+    {
+        "text": "Good morning",
+        "intent": "buy"
+    },
+    {
+        "text": "how are you?",
+        "intent": "buy"
+    },
+    {
+        "text": "You look so beautiful in that dress",
+        "intent": "none"
+    },
+    {
+        "text": "thank you",
+        "intent": "none"
+    }
+]
