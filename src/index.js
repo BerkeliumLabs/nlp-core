@@ -3,9 +3,14 @@ import '@tensorflow/tfjs-node';
 import { BerkeliumClassificationTrain } from './classification/train.js';
 import { BerkeliumClassificationPredict } from './classification/predict.js';
 import * as fs from 'fs';
+import chalk from 'chalk';
+const version = process.env.npm_package_version;
 
 const bkClassTrain = new BerkeliumClassificationTrain();
 const bkClassPredict = new BerkeliumClassificationPredict();
+
+// Welcome Message
+console.log(chalk.bgYellow.black(`\n BerkeliumLabs NLP Core: v${version} \n`));
 
 let TF_MODEL;
 let RESPONSE_DATA;
@@ -40,7 +45,7 @@ export const bkLabs = {
             const metadataFile = fs.readFileSync(metadataUrl);
             RESPONSE_DATA = JSON.parse(metadataFile);
             
-            console.log(JSON.parse(metadataFile), RESPONSE_DATA);
+            //console.log(JSON.parse(metadataFile), RESPONSE_DATA);
             callBackFunction();
 
             return [TF_MODEL, RESPONSE_DATA];

@@ -1,9 +1,11 @@
 import '@tensorflow/tfjs-node';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
-
+import chalk from 'chalk';
 export class BerkeliumClassificationPredict {
 
-    constructor() { }
+    constructor() { 
+
+    }
 
     encodeData(sentence) {
         const sentences = sentence.toLowerCase();
@@ -11,7 +13,7 @@ export class BerkeliumClassificationPredict {
             .then(model => {
                 return model.embed(sentences)
                     .then(embeddings => {
-                        console.log('Encoded: ', embeddings);
+                        console.log('Encoded');
                         return embeddings;
                     });
             })
@@ -26,7 +28,7 @@ export class BerkeliumClassificationPredict {
         const intentClass = responseData.classes[classIndex];
         const responseText = responseData.responses.find(element => intentClass in element);;
         const responseIndex = Math.floor(Math.random() * responseText[intentClass].length);
-        console.log(intentClass, responseIndex, responseText, responseText[intentClass].length);
+        //console.log(intentClass, responseIndex, responseText, responseText[intentClass].length);
         return responseText[intentClass][responseIndex];
     }
 }

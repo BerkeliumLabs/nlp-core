@@ -4,7 +4,8 @@ import { fileSystem } from '@tensorflow/tfjs-node/dist/io/file_system.js';
 import * as use from '@tensorflow-models/universal-sentence-encoder';
 import * as fs from 'fs';
 import * as path from 'path';
-
+import chalk from 'chalk';
+import { bkSpinner } from '../utils/spinner.js'
 export class BerkeliumClassificationTrain {
 
     __OUTDIR = '';
@@ -17,8 +18,10 @@ export class BerkeliumClassificationTrain {
 
     TRAIN_EPOCHS = 150;
 
+    SPINNER_ANIMATION;
+
     constructor() {
-        console.log('\n\x1b[0m\x1b[37m\x1b[44m BerkeliumLabs \x1b[0m', '\x1b[0m Welcome!\n');
+
     }
 
     initializeData(datasetPath, outputFolder) {
@@ -26,11 +29,11 @@ export class BerkeliumClassificationTrain {
             const rawData = fs.readFileSync(datasetPath);
             this.INTENT_DATA = JSON.parse(rawData);
             this.__OUTDIR = outputFolder;
-            console.log('Data Loaded Successfully');
+            console.log(chalk.bgGreen.black(' info ') + chalk.greenBright(' Data Loaded Successfully\n'));
 
             this.getClasses(this.INTENT_DATA);
         } catch (error) {
-            console.log('Data read error: ', error);
+            console.log(chalk.red(' error ') + chalk.redBright(' Data read error: '), error);
         }
     }
 
@@ -40,14 +43,23 @@ export class BerkeliumClassificationTrain {
             .then(model => {
                 return model.embed(sentences)
                     .then(embeddings => {
-                        console.log(`${data.length} inputs encoded.`);
-                        clearInterval(this.loadingAnimation);
+                        console.log(
+                            chalk.bgGreen.black('\n info ') +
+                            chalk.greenBright(` ${data.length} inputs encoded.`)
+                        );
+
+                        bkSpinner.stopSpinner(this.SPINNER_ANIMATION);
+
                         return embeddings;
                     });
             })
-            .catch(err => console.error('Fit Error:', err));
-        console.log(`Data Encoding Started: ${data.length} inputs`);
-        this.loadingAnimation;
+            .catch(err => console.error(chalk.redBright('Fit Error:'), err));
+        console.log(
+            chalk.bgGreen.black(' info ') +
+            chalk.greenBright(` Data Encoding Started: ${data.length} inputs\n`)
+        );
+
+        this.SPINNER_ANIMATION = bkSpinner.spinnerAnimation()
 
         return trainingData
     }
@@ -124,8 +136,11 @@ export class BerkeliumClassificationTrain {
                 verbose: 0,
                 callbacks: {
                     onEpochEnd: async (epoch, logs) => {
-                        console.log('\x1b[0m\x1b[34mEpoch: ' + (epoch + 1) + '\x1b[35m | Loss: ' + logs.loss.toFixed(5) +
-                            '\x1b[33m | Accuracy: ' + logs.acc.toFixed(5));
+                        console.log(
+                            chalk.cyan(`Epoch: ${(epoch + 1)}`) +
+                            chalk.yellowBright(` | Loss: ${logs.loss.toFixed(5)}`) +
+                            chalk.green(` | Accuracy: ${logs.acc.toFixed(5)}`)
+                        );
                     }
                 }
             }).then(info => {
@@ -133,9 +148,13 @@ export class BerkeliumClassificationTrain {
                 const infoIndex = info.epoch.length - 1;
                 const finalLoss = info.history.loss[infoIndex].toFixed(5);
                 const finalAcc = info.history.acc[infoIndex].toFixed(5);
-                console.log('\x1b[0m\x1b[37m\x1b[44m BuddhiNLP \x1b[0m', '\x1b[32m Training Completed at \x1b[0m' +
-                    '==>\x1b[0m\x1b[35m Loss: ' + finalLoss + '\x1b[33m | Accuracy: ' + finalAcc + '\x1b[0m');
 
+                console.log(
+                    chalk.bgYellow.black(`\n BerkeliumLabs NLP Core `) +
+                    chalk.greenBright(' Training Completed at ==>') +
+                    chalk.yellowBright(` Loss: ${finalLoss}`) +
+                    chalk.green(` | Accuracy: ${finalAcc}\n`)
+                );
                 this.saveModelData(model);
             });
         }).catch(err => console.log('Prom Err:', err));
@@ -149,7 +168,7 @@ export class BerkeliumClassificationTrain {
         try {
             fs.mkdirSync(modelOutFolder, { recursive: true }, err => {
                 if (err !== null) {
-                    console.log('\x1b[31mMaking Directory Error: ' + err + '\x1b[0m');
+                    console.log(chalk.red(`Making Directory Error: ${err}`));
                 }
             });
             await model.save(fileSystem(modelOutFolder));
@@ -157,22 +176,16 @@ export class BerkeliumClassificationTrain {
             const metaOutPath = path.resolve(modelOutFolder, 'model_metadata.json');
             const metadataStr = JSON.stringify({ 'classes': this.INTENT_CLASSES, 'responses': this.INTENT_RESPONSES });
             fs.writeFileSync(metaOutPath, metadataStr, { encoding: 'utf8' });
+
+            console.log(
+                chalk.bgGreen.black(' info ') +
+                chalk.green(` Model data saved to: `) +
+                chalk.underline(`${modelOutFolder}\n`)
+            );
         } catch (error) {
-            console.log(error);
+            console.log(chalk.red(`Oops! We couldn't save your model:\n${error}`));
         }
 
         return;
     }
-
-    loadingAnimation = (function () {
-        const h = ['|', '/', '-', '\\'];
-        let i = 0;
-
-        return setInterval(() => {
-            i = (i > 3) ? 0 : i;
-            console.clear();
-            console.log(h[i], 'Encording Data...');
-            i++;
-        }, 200);
-    })();
 }
