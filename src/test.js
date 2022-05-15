@@ -10,16 +10,12 @@ let mymodel;
 
 async function modelLoaded() {
     console.log('model loaded');
-    encodedSentence = await bkLabs.nlu.encodeText(sentence, textEncoded);
+    encodedSentence = await bkLabs.nlu.encodeText(sentence);
     console.log('text encoded', encodedSentence);
     const predictData = await mymodel[0].predict(encodedSentence);
     console.log('predict data', predictData);
     const myReply = bkLabs.nlu.predictReply(predictData, mymodel[1]);
     console.log(myReply);
-}
-
-async function textEncoded() {
-    console.log('text encoded');
 }
 
 async function runPredict() {

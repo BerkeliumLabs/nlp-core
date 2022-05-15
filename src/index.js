@@ -42,7 +42,7 @@ export const bkLabs = {
             
             console.log(JSON.parse(metadataFile), RESPONSE_DATA);
             callBackFunction();
-            
+
             return [TF_MODEL, RESPONSE_DATA];
         },
         /**
@@ -51,9 +51,8 @@ export const bkLabs = {
          * @param {object} callBackFunction : Callback Function to execute when encoding is completed
          * @returns 
          */
-        encodeText: async (sentence, callBackFunction) => {
+        encodeText: async (sentence) => {
             const encodedText = await bkClassPredict.encodeData(sentence);
-            callBackFunction();
             return encodedText;
         },
         /**
