@@ -146,18 +146,22 @@ export class BerkeliumClassificationTrain {
         const timeStamp = Date.now();
         const modelOutFolder = path.resolve(this.__OUTDIR, timeStamp + '/');
 
-        fs.mkdir(modelOutFolder, { recursive: true }, err => {
-            if (err !== null) {
-                console.log('\x1b[31mMaking Directory Error: ' + err + '\x1b[0m');
-            }
-        });
-        await model.save(fileSystem(modelOutFolder));
+        try {
+            fs.mkdirSync(modelOutFolder, { recursive: true }, err => {
+                if (err !== null) {
+                    console.log('\x1b[31mMaking Directory Error: ' + err + '\x1b[0m');
+                }
+            });
+            await model.save(fileSystem(modelOutFolder));
 
-        const metaOutPath = path.resolve(modelOutFolder, 'model_metadata.json');
-        const metadataStr = JSON.stringify({ 'classes': this.INTENT_CLASSES, 'responses': this.INTENT_RESPONSES });
-        fs.writeFileSync(metaOutPath, metadataStr, { encoding: 'utf8' });
+            const metaOutPath = path.resolve(modelOutFolder, 'model_metadata.json');
+            const metadataStr = JSON.stringify({ 'classes': this.INTENT_CLASSES, 'responses': this.INTENT_RESPONSES });
+            fs.writeFileSync(metaOutPath, metadataStr, { encoding: 'utf8' });
+        } catch (error) {
+            console.log(error);
+        }
 
-        return metadataStr;
+        return;
     }
 
     loadingAnimation = (function () {
