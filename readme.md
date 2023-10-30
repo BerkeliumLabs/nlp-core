@@ -1,7 +1,16 @@
 [![Version](https://img.shields.io/npm/v/@berkelium/nlp-core.svg)](https://www.npmjs.com/package/@berkelium/nlp-core)
 [![](https://data.jsdelivr.com/v1/package/npm/buddhi-nlp/badge)](https://www.jsdelivr.com/package/npm/@berkelium/nlp-core)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
+> [!WARNING]  
+> This project is deprecated and no longer maintained.
+
+> [!NOTE]  
+> Visit the replacing project for this [here](https://github.com/BerkeliumLabs).
+
+> [!IMPORTANT]  
+> You can still tryout this project, but no active contributions or support will be provided.
 
 # BerkeliumLabs NLP
 
